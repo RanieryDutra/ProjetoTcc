@@ -1,35 +1,54 @@
-import  React from 'react';
+import  React, { useState, useContext } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native'
 
-export default function EsqueciSenha ({ navigation }) {
+import { AuthContext } from '../../contexts/auth'
+
+export default function CriarConta2() {
+    const navigation = useNavigation();
+
+    const [nome, setNome] = useState('');
+
+    const { Nome } = useContext(AuthContext);
+
+    function handleNome() {
+        Nome(nome);
+        navigation.navigate('CriarConta3');
+        setNome('');
+    }
+
     return (
         <View style = {styles.containerPrincipal}>
             <View style = {styles.containerAzul}>
                 <Text style = {styles.estiloFrase}>
-                    Qual seu e-mail ?
+                    Qual seu nome ?
                 </Text>
                 <View style = {styles.containerEmail}>
                 <TextInput
                     style = {styles.inputTexto}
-                    placeholder = "Digite seu e-mail aqui"
+                    placeholder = "Digite seu nome."
                     placeholderTextColor = '#FFF'
                     autoCorrect = { false }
-                    onChangeText = {() => {}}
+                    value = { nome }
+                    onChangeText = {(text) => setNome(text)}
+                    
                 />
                 </View>
-                <View style = {styles.containerBotao}>
+                <View>
                 <TouchableOpacity 
-                onPress = { () => navigation.navigate('EsqueciSenha2')}>
+                onPress = {handleNome}
+                style = {styles.btnEnviar}
+                >
                     <Text style = {styles.containerBotaoTexto}>
-                        Enviar
+                        Próximo
                     </Text>
                 </TouchableOpacity>
                 </View>
             </View>
         </View>
     );
+ }
 
-}
 
 const styles = StyleSheet.create({
     containerPrincipal: {
@@ -38,11 +57,10 @@ const styles = StyleSheet.create({
     containerAzul: {
         backgroundColor: '#000000',
         width: 480,
-        height: 860
+        height: 890
     },
     estiloFrase: {
-        
-        width: 480,
+        width: 505,
         paddingTop: 250,
         paddingStart: 100,
         fontSize: 40,
@@ -57,6 +75,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         borderRadius: 7,
         padding: 10, 
+        color: '#FFFF'
       },
       containerEmail: {
         marginTop: 60,
@@ -64,6 +83,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40
       },
       containerBotao: {
+        height: 40,
+        width: 100,
+        borderRadius: 40,
+        borderWidth: 2,
+        backgroundColor:'black',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+        marginStart: 330
+      },
+      btnEnviar: {
         height: 48,
         width: 360,
         borderRadius: 10,

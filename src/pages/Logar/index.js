@@ -1,11 +1,12 @@
 import  React from 'react';
 import { View, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'
 
-export default function EsqueciSenha3() {
 
+
+export default function Logar () {
     const navigation = useNavigation();
-
+  
     return (
         <View style = {styles.containerPrincipal}>
             <View style = {styles.containerAzul}>
@@ -15,8 +16,8 @@ export default function EsqueciSenha3() {
                     resizeMode = 'contain'
         />
                 <Text style = {styles.estiloFrase}>
-                    Enviamos um e-mail para você poder trocar sua senha. Atenciosamente a equipe AllJobs
-                    agradece sua compreensão.
+                    Para ter acesso a esta funcionalidade você precisa estar logado.
+                    Porfavor, faça o login para ter acesso a todas as funcionalidades do app xD.
                 </Text>
             </View>
             <View style = {styles.containerVerde}>
@@ -24,7 +25,7 @@ export default function EsqueciSenha3() {
                 <TouchableOpacity
                 onPress = { () => navigation.navigate('Login')}>
                     <Text style = {styles.estiloHome}>
-                        Voltar para Login
+                        Ir para Login
                     </Text>
                 </TouchableOpacity>
                 </View>
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     containerAzul: {
         backgroundColor: '#000000',
         width: 480,
-        height: 760
+        height: 761
     },
     containerVerde: {
         width: 480,

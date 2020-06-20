@@ -33,22 +33,3 @@ export class Header extends Component {
         );
     }
 }
-
-/*const styles = StyleSheet.create({
-    header: {
-        backgroundColor: '#151515',
-        height: 55,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 10
-    },
-    logo: {
-        width: 65,
-        height: 23
-    },
-    estiloMenu: {
-        height: 23,
-        width: 23
-    }
-});*/

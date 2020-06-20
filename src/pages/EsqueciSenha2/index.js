@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     containerAzul: {
-        backgroundColor: '#38b6ff',
+        backgroundColor: '#000000',
         width: 480,
         height: 860
     },
@@ -63,15 +63,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40
     },
     containerBotao: { 
-        height: 40,
-        width: 100,
-        borderRadius: 40,
-        borderWidth: 2,
-        backgroundColor:'black',
+        height: 48,
+        width: 360,
+        borderRadius: 10,
+        backgroundColor:'#151515',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
-        marginStart: 330
+        marginTop: 50,
+        marginStart: 70
     },
     estiloTextoBotao: {
         fontSize: 20,

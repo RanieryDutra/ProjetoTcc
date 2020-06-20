@@ -1,60 +1,23 @@
-import React, { Component } from 'react';
-import { View, Image, TextInput, TouchableOpacity, Text, StyleSheet, Button } from 'react-native';
-import firebase from './src/firebaseConnection';​
+import React, { useState, useContext } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { View, Image, TextInput, TouchableOpacity, Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { AuthContext } from '../../contexts/auth'
 
-/*import firebase from 'firebase/app';
-import 'firebase/database';*/
+export default function Login(){
 
+  const navigation = useNavigation();
+  const { Login } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
-
-export default class Login extends Component {
-
-  constructor(props){
-    super(props);
-    this.state = {
-      nome:'',
-      cargo:''
-
-    };
-
-    this.cadastrarFuncionario = this.cadastrarFuncionario.bind(this);
-
-    let firebaseConfig = {
-      apiKey: "AIzaSyAYnlHP6TrDU7jAzWcUqYirylDKLs5NJ_A",
-      authDomain: "alljobs-8f75a.firebaseapp.com",
-      databaseURL: "https://alljobs-8f75a.firebaseio.com",
-      projectId: "alljobs-8f75a",
-      storageBucket: "alljobs-8f75a.appspot.com",
-      messagingSenderId: "1091690749675",
-      appId: "1:1091690749675:web:a90443b505365a2aac28ae",
-      measurementId: "G-T226P8PWKK"
-  };
-
-  if(!firebase.apps.length){
-      firebase.initializeApp(firebaseConfig);
-  };
-}
-
-
-
-  cadastrarFuncionario(){
-    if(this.state.nome != '' && this.state.cargo != ''){
-
-     let usuarios = firebase.database().ref('usuarios');
-     let chave = usuarios.push().key;
-
-     usuarios.child(chave).set({
-      nome: this.state.nome,
-      cargo: this.state.cargo
-     });
-
-    }
+  function handleLogin(){
+    Login(email, senha);
   }
 
-  render(navigation){
   return (
     <View style = {styles.containerPrincipal}>
       <View style = {styles.containerAzul}>
+        <KeyboardAvoidingView>
       <View style = {styles.containerLogo}>
         <Image 
         style={styles.imagemLogo}
@@ -69,7 +32,8 @@ export default class Login extends Component {
         placeholder = "E-mail"
         placeholderTextColor = '#FFF'
         autoCorrect = { false }
-        onChangeText = {(nome) => {this.setState({nome})}}
+        value = { email }
+        onChangeText = {(Text) => setEmail(Text)}
         />
 
 <TextInput
@@ -77,34 +41,58 @@ export default class Login extends Component {
         placeholder = "Senha "
         placeholderTextColor = '#FFF'
         autoCorrect = { false }
-        onChangeText = {(cargo) => {this.setState({cargo})}}
+        value = { senha }
+        onChangeText = {(Text) => setSenha(Text)}
         />
         </View>
-<TouchableOpacity onPress={this.cadastrarFuncionario} style = {styles.containerBotaoLogin}>
+      
+      <TouchableOpacity>
+      <Text
+      style = {{marginStart: 75,fontSize: 15, color: 'gray'}}
+      onPress={ () => navigation.navigate('EsqueciSenha')}
+      >Esqueceu a Senha?</Text>
+      </TouchableOpacity>
+      <View style = {styles.containerBotoeslogin}>
+      <TouchableOpacity
+      style = {styles.btnEntrar}
+      onPress = {handleLogin}>
         <Text style = {styles.containerBotaoLoginTexto}>
         Entrar
         </Text>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity style = {styles.btnGmail}>
+        <Image 
+        style = {styles.logoGmail}
+        source = {require('./logogmail.png')}
+        />
+        <Text style = {{fontSize: 20,color: 'white'}}>
+        Logar com G-mail  
+        </Text> 
+        </TouchableOpacity>
+        <TouchableOpacity style = {styles.btnFace}>
+          <Image 
+          style = {styles.logoFace}
+          source = {require('./logo-facebook.png')}
+          />
+          <Text style = {{fontSize: 20, color: 'white'}}>
+            Logar com Facebook
+          </Text>
+        </TouchableOpacity>
+        </View>
+        </KeyboardAvoidingView>
+        </View>
+
+
       <View style = { styles.containerVerde}>
-
-      <TouchableOpacity>
-      <Text
-      style = {{paddingTop: 75, fontSize: 20, color: 'white'}}
-      onPress={ () => navigation.navigate('EsqueciSenha')}
-      >Esqueceu a Senha?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity>
+        <TouchableOpacity onPress = {() => navigation.navigate('CriarConta1')}>
           <Text style = {{fontSize: 20, color: 'white'}}>Criar nova conta</Text>
-        </TouchableOpacity> 
-        
+        </TouchableOpacity>        
       </View>
     </View>
 
   );
 }
-}
+
 
 const styles = StyleSheet.create({
   containerPrincipal: {
@@ -115,7 +103,8 @@ const styles = StyleSheet.create({
   containerAzul: {
     width: 480,
     height: 760,
-    backgroundColor: '#000000'
+    backgroundColor: '#000000',
+    
   },
   containerLogo:{
     height: 230,
@@ -131,17 +120,56 @@ const styles = StyleSheet.create({
     paddingStart: 70,
     paddingHorizontal: 40
   },
-  containerBotaoLogin:{
-    height: 40,
-    width: 100,
-    borderRadius: 40,
-    borderWidth: 2,
-    borderColor: 'white',
-    backgroundColor:'gray',
+  btnEntrar:{
+    height: 48,
+    width: 360,
+    borderRadius: 10,
+    backgroundColor:'#151515',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20,
+    marginStart: 70
+  },
+  btnFace: {
+    height: 48,
+    width: 360,
+    borderRadius: 10,
+    backgroundColor:'#3b5998',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     marginTop: 10,
-    marginStart: 330
+    marginStart: 70
+  },
+  logoFace:{
+    height: 45,
+    width: 50,
+    marginRight: 50,
+    marginLeft: 2
+  },
+  containerBotaoLogins: {
+    borderRadius: 10,
+    borderColor: 'white',
+    backgroundColor:'#151515',
+    justifyContent: 'center',
+  },
+  btnGmail: {
+    height: 48,
+    width: 360,
+    borderRadius: 10,
+    backgroundColor:'#db4a39',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 10,
+    marginStart: 70
+  },  
+  logoGmail: {
+    height: 38,
+    width: 50,
+    borderRadius: 3,
+    marginRight: 50,
+    marginLeft: 8
   },
   containerBotaoLoginTexto: {
     fontSize: 20,
@@ -151,12 +179,12 @@ const styles = StyleSheet.create({
   containerVerde: {
     height: 125,
     width: 480,
-    backgroundColor: 'gray',
-    alignItems: "flex-end",
+    backgroundColor: '#000000',
+    alignItems: 'center',
     paddingVertical: 60,
     paddingHorizontal: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'flex-end'
   },
   inputTexto: {
     borderBottomWidth: 1,
@@ -165,7 +193,6 @@ const styles = StyleSheet.create({
     width: '97%',
     marginBottom: 10,
     fontSize: 17,
-    borderRadius: 7,
     padding: 10,
     color: 'white'
   },
