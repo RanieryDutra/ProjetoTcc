@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-export default function ConteudoDrawerOut(props) {
+export default function ConteudoDrawerOut() {
+
+  const navigation = useNavigation();
+
  return (
     <View style = {{
         flex: 1,
@@ -24,7 +28,7 @@ export default function ConteudoDrawerOut(props) {
           padding: 10
         }}>
           <TouchableOpacity 
-          onPress = { () => props.navigation.navigate('Login')}
+          onPress = { () => navigation.navigate('Login')}
           style = {{
             borderBottomWidth: 1,
             borderBottomColor: 'gray',

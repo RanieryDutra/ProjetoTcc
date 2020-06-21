@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'
+ 
+export default function Header(){
 
-export class Header extends Component {
-    render() {
+    const navigation = useNavigation();
+
         return(
             <View style = {{ 
             backgroundColor: '#151515',
@@ -12,7 +15,7 @@ export class Header extends Component {
             justifyContent: 'space-between',
             padding: 10
             }}>
-            <TouchableOpacity onPress={() => this.props.navigation.openDrawer()}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
                     <Image
                     source={require('./Home/menu-b.png')}
                     style={{
@@ -32,4 +35,3 @@ export class Header extends Component {
             </View>
         );
     }
-}

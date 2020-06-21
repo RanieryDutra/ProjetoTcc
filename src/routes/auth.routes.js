@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Image, View,Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -32,10 +32,6 @@ import CriarConta3 from '../pages/CriarConta3';
 import CriarConta4 from '../pages/CriarConta4';
 import CriarConta5 from '../pages/CriarConta5';
 import CriarConta6 from '../pages/CriarConta6';
-
-
-import { } from '../pages/Header';
-import { Component } from 'react';
 
 
 

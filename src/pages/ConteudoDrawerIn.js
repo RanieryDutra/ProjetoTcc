@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'
 
-export default function ConteudoDrawerIn(props) {
+export default function ConteudoDrawerIn() {
+
+  const navigation = useNavigation();
+
  return (
     <View style = {{
         flex: 1,

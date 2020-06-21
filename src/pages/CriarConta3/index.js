@@ -5,10 +5,9 @@ import { useNavigation } from '@react-navigation/native'
 import { AuthContext } from '../../contexts/auth'
 
 export default function CriarConta3() {
+
     const navigation = useNavigation();
-
     const [date, setDate] = useState('');
-
     const { Date } = useContext(AuthContext);
 
     function handleDate() {
