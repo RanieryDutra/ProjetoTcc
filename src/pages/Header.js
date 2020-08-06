@@ -1,11 +1,10 @@
 import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native'
+
+const navigation = useNavigation();
  
 export default function Header(){
-
-    const navigation = useNavigation();
-
         return(
             <View style = {{ 
             backgroundColor: '#151515',

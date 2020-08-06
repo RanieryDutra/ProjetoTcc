@@ -13,6 +13,7 @@ function AuthProvider({ children }){
     const [cpf, setCpf] = useState('');
     const [estado, setEstado] = useState('');
     const [cidade, setCidade] = useState('');
+    const fotoURL = 'https://firebasestorage.googleapis.com/v0/b/alljobs-8f75a.appspot.com/o/images%2Fprofile%2Fperfil1.jpg?alt=media&token=ed7fe7b1-9bd2-4001-9991-569801facdfa'
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -39,8 +40,8 @@ function AuthProvider({ children }){
                 let data = {
                     uid: uid,
                     email: value.user.email,
-                    nome:snapshot.val().nome,
-                    estado: snapshot.val().Estado,
+                    nome: snapshot.val().nome,
+                    estado: snapshot.val().estado,
                     cidade: snapshot.val().cidade
                 };
                 setUser(data);
@@ -91,22 +92,25 @@ function AuthProvider({ children }){
     // Cadastrando Localização
     async function Localizacao(estado, cidade){
         await firebase.database().ref('users').child(userId).update({
-            Estado: estado,
-            cidade: cidade
+            estado: estado,
+            cidade: cidade,
+            photoURL: fotoURL
         })
         setEstado(estado);
         setCidade(cidade);
+
     }
 
     // Finalizando cadastro
     async function Finalizando(){
         let data = {
             uid: userId,
-            Nome: nome,
-            Data: dateN,
+            nome: nome,
+            data: dateN,
             CPF: cpf,
-            Estado: estado,
-            Cidade: cidade 
+            estado: estado,
+            cidade: cidade,
+            photoURL: fotoURL
         };
         setUser(data);
         storageUser(data);
@@ -126,7 +130,7 @@ function AuthProvider({ children }){
 
 
     return(
-        <AuthContext.Provider value = {{ signed: !!user, user, EmailSenha, Nome, Date, CPF, Localizacao, Finalizando, Login, Deslogando, loading }}>
+        <AuthContext.Provider value = {{ signed: !!user, user, userId, EmailSenha, Nome, Date, CPF, Localizacao, Finalizando, Login, Deslogando, loading }}>
             {children}
         </AuthContext.Provider>
     );

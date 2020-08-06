@@ -1,11 +1,10 @@
+import 'react-native-gesture-handler';
 import React from 'react';
-import { Image, View,Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
@@ -18,14 +17,12 @@ import Perfil from '../pages/Perfil';
 
 //Tela Drawer Navigator
 import Login from '../pages/Login';
-import ConteudoDrawerOut from '../pages/ConteudoDrawerOut';
-import ConteudoDrawerIn from '../pages/ConteudoDrawerIn';
+import ConteudoDrawerOut from '../pages/ConteudoDrawer/ConteudoDrawerOut';
+import ConteudoDrawerIn from '../pages/ConteudoDrawer/ConteudoDrawerIn';
 
 //Telas Stack Navigator
 
-
-import { Header } from '../pages/Header';
-import { Component } from 'react';
+import Perfil2 from '../pages/Perfil2';
 
 
 
@@ -33,14 +30,6 @@ import { Component } from 'react';
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 const Drawer = createDrawerNavigator();
-
-
-
-const Content = (props) => {
-  return (
-    ConteudoDrawerIn(props)
-  );
-}
 
 
 function Tabs() { 
@@ -55,7 +44,7 @@ function Tabs() {
   }}
   >
     <Tab.Screen 
-    name="Feed"
+    name="Home"
      component={Home}
      barStyle= {{
        style: {
@@ -112,7 +101,7 @@ function MyDrawer() {
   return (
     <Drawer.Navigator 
     initialRouteName='Home'
-    drawerContent={Content}
+    drawerContent={ props => <ConteudoDrawerIn {...props}/>}
     >
       <Drawer.Screen name="Home" component={Tabs} />
     </Drawer.Navigator>
@@ -122,8 +111,7 @@ function MyDrawer() {
 
 
 
-export default class App extends Component{
-  render(){
+export default function AppRoutes(){
   return (
      <NavigationContainer independent={true}>
       <Stack.Navigator
@@ -140,7 +128,20 @@ export default class App extends Component{
           headerTintColor: '#FFFF'
         }} 
          />
+         <Stack.Screen
+        name="Perfil2"
+        component={Perfil2}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />
       </Stack.Navigator>
     </NavigationContainer>
   );}
-}

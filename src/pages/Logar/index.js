@@ -17,7 +17,7 @@ export default function Logar () {
         />
                 <Text style = {styles.estiloFrase}>
                     Para ter acesso a esta funcionalidade você precisa estar logado.
-                    Porfavor, faça o login para ter acesso a todas as funcionalidades do app xD.
+                    Por favor, faça o login para ter acesso a todas as funcionalidades do aplicativo.
                 </Text>
             </View>
             <View style = {styles.containerVerde}>

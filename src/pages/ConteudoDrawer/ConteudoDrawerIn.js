@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native'
+import { AuthContext } from '../../contexts/auth';
 
-export default function ConteudoDrawerIn() {
+export default function ConteudoDrawerIn(props) {
 
+  const { user, Deslogando } = useContext(AuthContext);
   const navigation = useNavigation();
 
  return (
@@ -13,9 +15,9 @@ export default function ConteudoDrawerIn() {
         alignItems: 'center',
         backgroundColor: '#151515'
       }}>
-        <View style = {{ width: 280, marginHorizontal: 10, marginVertical: 10 }}>
+        <View style = {{ width: 280, marginLeft: 40, marginVertical: 10 }}>
         <Image 
-        source={require('./Home/LogoBranca.png')}
+        source={require('../Home/LogoBranca.png')}
         style={{width: 190, height: 70, margin: 15}}
         />
         </View>
@@ -104,6 +106,26 @@ export default function ConteudoDrawerIn() {
           </TouchableOpacity>
 
           <TouchableOpacity 
+          onPress = { () => Deslogando() }
+          style = {{
+            borderBottomWidth: 1,
+            borderBottomColor: 'gray',
+            backgroundColor: 'transparent',    
+            width: '97%',
+            marginBottom: 10,
+            marginTop: 340,
+            fontSize: 17,
+            padding: 10
+          }}>
+            <Text style = {{
+              fontSize: 23,
+              color: '#FFF'
+            }}>
+              Sair da minha conta
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
           onPress = { () => {} }
           style = {{
             borderBottomWidth: 1,
@@ -111,7 +133,6 @@ export default function ConteudoDrawerIn() {
             backgroundColor: 'transparent',    
             width: '97%',
             marginBottom: 10,
-            marginTop: 370,
             fontSize: 17,
             padding: 10
           }}>

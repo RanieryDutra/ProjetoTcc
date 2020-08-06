@@ -1,11 +1,10 @@
+import 'react-native-gesture-handler';
 import React, { Component } from 'react';
-import { Image, View,Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
@@ -19,8 +18,8 @@ import Logar2 from '../pages/Logar2';
 
 //Tela Drawer Navigator
 import Login from '../pages/Login';
-import ConteudoDrawerOut from '../pages/ConteudoDrawerOut';
-import ConteudoDrawerIn from '../pages/ConteudoDrawerIn';
+import ConteudoDrawerOut from '../pages/ConteudoDrawer/ConteudoDrawerOut';
+import ConteudoDrawerIn from '../pages/ConteudoDrawer/ConteudoDrawerIn';
 
 //Telas Stack Navigator
 import EsqueciSenha from '../pages/EsqueciSenha';
@@ -32,6 +31,7 @@ import CriarConta3 from '../pages/CriarConta3';
 import CriarConta4 from '../pages/CriarConta4';
 import CriarConta5 from '../pages/CriarConta5';
 import CriarConta6 from '../pages/CriarConta6';
+import Perfil2 from '../pages/Perfil2';
 
 
 
@@ -42,11 +42,7 @@ const Drawer = createDrawerNavigator();
 
 
 
-const Content = (props) => {
-  return (
-    ConteudoDrawerOut(props)
-  );
-}
+//const Content = props => ConteudoDrawerOut(props)
 
 
 function Tabs() { 
@@ -118,7 +114,7 @@ function MyDrawer() {
   return (
     <Drawer.Navigator 
     initialRouteName='Home'
-    drawerContent={Content}
+    drawerContent={ props => <ConteudoDrawerOut {...props}/>}
     >
       <Drawer.Screen name="Home" component={Tabs} />
     </Drawer.Navigator>
@@ -128,8 +124,7 @@ function MyDrawer() {
 
 
 
-export default class App extends Component{
-  render(){
+export default function AuthRoutes(){
   return (
      <NavigationContainer independent={true}>
       <Stack.Navigator
@@ -144,6 +139,20 @@ export default class App extends Component{
             height: 25,
           },
           headerTintColor: '#FFFF'
+        }} 
+         />
+         <Stack.Screen
+        name="Perfil2"
+        component={Perfil2}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
         }} 
          />
         <Stack.Screen 
@@ -222,7 +231,7 @@ export default class App extends Component{
         name="Login"
         component={Login}
         options={{
-          title: 'Home',
+          title: 'Voltar',
           headerTintColor: 'white',
           headerStyle: {
             backgroundColor: '#000000'
@@ -265,4 +274,3 @@ export default class App extends Component{
       </Stack.Navigator>
     </NavigationContainer>
   );}
-}

@@ -2,6 +2,8 @@ import React, { useState, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Image, TextInput, TouchableOpacity, Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { AuthContext } from '../../contexts/auth'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { set } from 'react-native-reanimated';
 
 export default function Login(){
 
@@ -9,10 +11,15 @@ export default function Login(){
   const { Login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [mostrar, setNaoMostrar] = useState(true);
 
   function handleLogin(){
     Login(email, senha);
   }
+
+  function mostrarSenha() {
+    setNaoMostrar(!mostrar);
+}
 
   return (
     <View style = {styles.containerPrincipal}>
@@ -28,22 +35,30 @@ export default function Login(){
 
       <View style = {styles.containerLogin}>
         <TextInput
-        style = {styles.inputTexto}
+        style = {styles.inputTextoEmail}
         placeholder = "E-mail"
         placeholderTextColor = '#FFF'
         autoCorrect = { false }
         value = { email }
         onChangeText = {(Text) => setEmail(Text)}
+        keyboardType = 'email-address'
         />
-
-<TextInput
-        style = {styles.inputTexto}
-        placeholder = "Senha "
+        <View style = {{flexDirection: 'row'}}>
+        <TextInput
+        style = {styles.inputTextoSenha}
+        placeholder = "Senha"
         placeholderTextColor = '#FFF'
         autoCorrect = { false }
         value = { senha }
         onChangeText = {(Text) => setSenha(Text)}
+        secureTextEntry = {mostrar}
         />
+        <View style = {styles.inputEye}>
+        <TouchableOpacity onPress = {mostrarSenha}>
+        <Icon name="eye" color={'#FFFF'} size={20}/>
+        </TouchableOpacity>
+        </View>
+        </View>
         </View>
       
       <TouchableOpacity>
@@ -186,11 +201,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end'
   },
-  inputTexto: {
+  inputTextoEmail: {
     borderBottomWidth: 1,
     borderBottomColor: 'white',
     backgroundColor: 'transparent',    
     width: '97%',
+    marginBottom: 10,
+    fontSize: 17,
+    padding: 10,
+    color: 'white'
+  },
+  inputTextoSenha: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+    backgroundColor: 'transparent',    
+    width: '86%',
+    marginBottom: 10,
+    fontSize: 17,
+    padding: 10,
+    color: 'white'
+  },
+  inputEye: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+    backgroundColor: 'transparent',    
+    width: '11%',
     marginBottom: 10,
     fontSize: 17,
     padding: 10,
