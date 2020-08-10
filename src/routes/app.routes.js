@@ -19,6 +19,7 @@ import Perfil from '../pages/Perfil';
 import Login from '../pages/Login';
 import ConteudoDrawerOut from '../pages/ConteudoDrawer/ConteudoDrawerOut';
 import ConteudoDrawerIn from '../pages/ConteudoDrawer/ConteudoDrawerIn';
+import CadastrarServico from '../pages/CadastrarServico';
 
 //Telas Stack Navigator
 
@@ -131,6 +132,20 @@ export default function AppRoutes(){
          <Stack.Screen
         name="Perfil2"
         component={Perfil2}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />
+         <Stack.Screen
+        name="CadastrarServico"
+        component={CadastrarServico}
         options={{
           //headerShown: false,
           headerStyle: {

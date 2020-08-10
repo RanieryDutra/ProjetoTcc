@@ -11,32 +11,35 @@ export default function Home() {
     const { user } = useContext(AuthContext);
     const navigation = useNavigation();
     const [dataa, setData] = useState([]);
-    const [ photoProfile, setPhotoProfile ] = useState();
+    //const [ key, setKey ] = useState([]);
 
     useEffect(() => {
 
         async function loadUsers() {
-            await firebase.database().ref('users').on('value', (snapshoot) => {
+            
+            await firebase.database().ref('servicos').on('value', function(snapshoot) {
                 setData([]);
-
                 snapshoot.forEach((childItem) => {
-                    let data = {
-                        key: childItem.key,
-                        nome: childItem.val().nome,
-                        habilidades: childItem.val().Habilidades,
-                        cidade: childItem.val().cidade,
-                        estado: childItem.val().estado,
-                        photoUrl: childItem.val().photoURL
+                    childItem.forEach((filhoItem) => {
+                    let date = {
+                            chave: childItem.key,
+                            key: filhoItem.key,
+                            nome: filhoItem.val().servico,
+                            cidade: filhoItem.val().cidade,
+                            estado: filhoItem.val().estado,
+                            photoUrl: filhoItem.val().fotoUrl,
+                            descricao: filhoItem.val().descricao
                     }
-                    setData(oldArray => [...oldArray, data]);
+                    setData(oldArray => [...oldArray, date]);
+                    
+                    })
                 })
             })
         }
         loadUsers();
     }, [])
-    //console.log(dataa);
     function handleSeila(item) {
-        navigation.navigate('Perfil2', { uid: item.key });
+        navigation.navigate('Perfil2', { uid: item.chave });
     }
        return (
         <View style = {styles.containerPrincipal}>
@@ -72,7 +75,7 @@ export default function Home() {
                 />
                 <View style = {styles.estiloFlatList}> 
                 <Text style = {{ color: '#FFF', fontSize: 20}}>{item.nome} </Text>
-                <Text style = {{ color: '#FFF', fontSize: 15, marginLeft: 5, height: 75}}>{item.habilidades} </Text>
+                <Text style = {{ color: '#FFF', fontSize: 13, marginLeft: 5, height: 75}}>{item.descricao} </Text>
                 <View style = {{ alignItems: 'flex-end', marginRight: 5}}>
                 <Text style = {{ color: '#505050', fontSize: 12}}>{item.cidade}-{item.estado}</Text>
                 </View>
@@ -164,3 +167,19 @@ const styles = StyleSheet.create({
             })
           }
         loadPhotoProfile();*/
+
+        /* let data = {
+                        key: childItem.key,
+                        nome: childItem.val().nome,
+                        habilidades: childItem.val().Habilidades,
+                        cidade: childItem.val().cidade,
+                        estado: childItem.val().estado,
+                        photoUrl: childItem.val().photoURL
+                    }*/
+
+                    {/*let data = {
+                        key: childItem.key,
+                        nome: childItem.val().servico,
+                        cidade: childItem.val().cidade,
+                        estado: childItem.val().estado,
+                    photoUrl: childItem.val().photoURL*/}

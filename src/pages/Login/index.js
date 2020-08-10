@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import { View, Image, TextInput, TouchableOpacity, Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { AuthContext } from '../../contexts/auth'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { set } from 'react-native-reanimated';
 
 export default function Login(){
 

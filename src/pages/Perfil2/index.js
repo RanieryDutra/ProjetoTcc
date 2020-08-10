@@ -51,6 +51,7 @@ export default function Perfil2({ route }) {
     }
     loadServicos();
   }, [])
+  
   return (
     <View style = {styles.containerPrincipal}>
         <View style = {{ flexDirection: "row", marginTop: 25, marginHorizontal: 10 }}>

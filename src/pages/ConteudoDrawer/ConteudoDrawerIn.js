@@ -30,7 +30,7 @@ export default function ConteudoDrawerIn(props) {
           padding: 10
         }}>
           <TouchableOpacity 
-          onPress = { () => {} }
+          onPress = { () => navigation.navigate('CadastrarServico') }
           style = {{
             borderBottomWidth: 1,
             borderBottomColor: 'gray',
