@@ -10,6 +10,7 @@ import firebase from '../../Services/firebaseConnection';
 
 import {AuthContext} from '../../contexts/auth';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {white} from "react-native-paper/src/styles/colors";
 
 export default function Pesquisa() {
 
@@ -19,6 +20,8 @@ export default function Pesquisa() {
     const [valorPicker, setValorPicker] = useState('');
     const modalizeRef = useRef(null);
     const [categoria, setCategoria] = useState('');
+    const [text, onChangeText] = useState('');
+
     {/*const info = [
         {key: '1',nome: 'Adminstrativo / Secretariado / Finanças', valor: '' , setValor: ''},
         {key: '2',nome: 'Comercial / Vendas'},
@@ -39,13 +42,11 @@ export default function Pesquisa() {
 
 
     useEffect(() => {
-
         async function loadUsers() {
 
             if (valorPicker == '') {
                 await firebase.database().ref('servicos').on('value', function (snapshoot) {
                     setData([]);
-                    console.log(snapshoot.val());
                     snapshoot.forEach((childItem) => {
                         childItem.forEach((filhoItem) => {
                             let date = {
@@ -65,11 +66,9 @@ export default function Pesquisa() {
             } else {
                 await firebase.database().ref('servicos').on('value', function (snapshoot) {
                     setData([]);
-                    console.log(snapshoot.val());
                     snapshoot.forEach((childItem) => {
                         childItem.forEach((filhoItem) => {
                             if (valorPicker === filhoItem.val().categorias) {
-
                                 let date = {
                                     chave: childItem.key,
                                     key: filhoItem.key,
@@ -90,7 +89,6 @@ export default function Pesquisa() {
         loadUsers();
     }, [valorPicker])
 
-    //console.log(dataa);
     function handleSeila(item) {
         navigation.navigate('Perfil2', {uid: item.chave});
     }
@@ -100,7 +98,7 @@ export default function Pesquisa() {
     }
 
     async function loadUsuarios() {
-        console.log(valorPicker);
+        console.log('aquiiiiiiiiiiiiiiiiiiiii');
     }
 
     return (
@@ -164,6 +162,8 @@ export default function Pesquisa() {
 
                 <TextInput
                     style={styles.inputPesquisa}
+                    onChangeText={text => onChangeText(text)}
+                    value={text}
                 />
 
                 <TouchableOpacity
@@ -177,7 +177,7 @@ export default function Pesquisa() {
 
             <TouchableOpacity
                 onPress={() => onOpen()}
-                style={{marginLeft: 45, marginBottom: 10}}>
+                style={{marginLeft: 1, marginBottom: 10}}>
                 <Text style={{color: '#FFF', fontSize: 17}}> Filtrar <Icon name="caret-down" color={'#FFFF'} size={25}/>
                 </Text>
             </TouchableOpacity>
@@ -242,15 +242,15 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 10
     },
     inputPesquisa: {
-        backgroundColor: '#151515',
+        backgroundColor: white,
         marginTop: 20,
-        marginLeft: 40,
         //marginBottom: 10,
         width: 350,
         borderTopLeftRadius: 10,
         borderBottomLeftRadius: 10,
-        color: '#FFF',
-        fontSize: 18
+        color: '#000000',
+        fontSize: 18,
+        flex: 1,
     },
     costasImagePerfil: {
         width: 120,
