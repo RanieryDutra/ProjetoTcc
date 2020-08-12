@@ -28,7 +28,7 @@ export default function Pesquisa() {
     const modalizeRef = useRef(null);
     const [categoria, setCategoria] = useState('');
     const [text, onChangeText] = useState('');
-    
+
     useEffect(() => {
         async function loadUsers() {
             if (valorPicker == '') {
@@ -39,7 +39,6 @@ export default function Pesquisa() {
                         setData([]);
                         snapshoot.forEach((childItem) => {
                             childItem.forEach((filhoItem) => {
-                                console.log(filhoItem.val().servico);
                                 let date = {
                                     chave: childItem.key,
                                     key: filhoItem.key,
@@ -103,8 +102,7 @@ export default function Pesquisa() {
     }
 
     async function loadUsuarios(dataInputText) {
-
-        if (dataInputText.length > 2) {
+        if (dataInputText.trim().length > 2) {
             await firebase
                 .database()
                 .ref('servicos')
@@ -136,7 +134,6 @@ export default function Pesquisa() {
                     setData([]);
                     snapshoot.forEach((childItem) => {
                         childItem.forEach((filhoItem) => {
-                            console.log(filhoItem.val().servico);
                             let date = {
                                 chave: childItem.key,
                                 key: filhoItem.key,
