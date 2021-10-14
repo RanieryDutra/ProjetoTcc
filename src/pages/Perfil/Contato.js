@@ -1,23 +1,26 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+
+import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-
-
-
 
 export default function Contato() {
 
 
     const navigation = useNavigation();
+    const modalizeRef = useRef(null);
 
+    //style = {{ fontSize: 16, color: '#FFF' }}
  return (
    <View>
        <View style = {{flexDirection: 'row'}}>
         <View style = {styles.boxPrincipais}>
         <Text style = {{ color: '#FFF', fontSize: 12, marginTop: 2 }}>    Principais </Text>
         <View style = {{ flexDirection: 'row'}}>
-        <TouchableOpacity>
+        <TouchableOpacity
+        onPress = {onOpen2}
+        >
         <Icon name="whatsapp" color={'#FFFF'} size={80} style = {{height: 80, marginLeft: 50}}/>
         </TouchableOpacity>
         <TouchableOpacity>
@@ -62,7 +65,7 @@ export default function Contato() {
         </View>
         <View style = {styles.costasImageChat}>
         <TouchableOpacity
-        onPress = { () => navigation.navigate('Chat')}
+        //onPress = { () => navigation.navigate('Chat')}
         >
         <View style = {styles.imageChat}>
         <Image

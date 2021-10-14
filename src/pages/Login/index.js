@@ -1,16 +1,37 @@
 import React, { useState, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Image, TextInput, TouchableOpacity, Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
+
 import { AuthContext } from '../../contexts/auth'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Login(){
 
   const navigation = useNavigation();
-  const { Login } = useContext(AuthContext);
+  const { Login, loginGoogle, loginFacebook } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [mostrar, setNaoMostrar] = useState(true);
+
+  async function loginGoogle2() {
+    let verificadorGoogle = await loginGoogle();
+    if(verificadorGoogle == true) {
+      console.log("Logar direto, pois já possui cadastro e o verificador é igual a " + verificadorGoogle);
+      
+    } if(verificadorGoogle == false) {
+      console.log("Realizar cadastro antes de logar e o verificador é igual a " + verificadorGoogle);
+      navigation.navigate('CriarConta3');
+    }
+  }
+
+  async function logarFacebook() {
+    let verificadoraFace = await loginFacebook();
+    if(verificadoraFace == true) {
+      console.log("Logar direto, pois já possui cadastro e o verificador é igual a " + verificadoraFace);
+    } if(verificadoraFace == false) {
+      navigation.navigate('CriarConta3');
+    }
+  }
 
   function handleLogin(){
     Login(email, senha);
@@ -74,7 +95,9 @@ export default function Login(){
         Entrar
         </Text>
         </TouchableOpacity>
-        <TouchableOpacity style = {styles.btnGmail}>
+        <TouchableOpacity 
+        onPress = {loginGoogle2}
+        style = {styles.btnGmail}>
         <Image 
         style = {styles.logoGmail}
         source = {require('./logogmail.png')}
@@ -83,7 +106,9 @@ export default function Login(){
         Logar com G-mail  
         </Text> 
         </TouchableOpacity>
-        <TouchableOpacity style = {styles.btnFace}>
+        <TouchableOpacity 
+        onPress = {logarFacebook}
+        style = {styles.btnFace}>
           <Image 
           style = {styles.logoFace}
           source = {require('./logo-facebook.png')}
@@ -233,3 +258,11 @@ const styles = StyleSheet.create({
 });
    // backgroundColor: '#adff2f',
     //backgroundColor: 'rgba(255,255,255,0.3)'
+
+    /*
+    if(verificador == true) {
+      console.log("Realizar cadastro antes de logar");
+    } if(verificador == false) {
+      console.log("Logar direto, pois já possui cadastro");
+    }
+    */

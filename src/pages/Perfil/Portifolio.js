@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Modal, TouchableWithoutFeedback, TouchableOpacity, Image, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 
-import { Modalize } from 'react-native-modalize';
+import ImagePicker from 'react-native-image-picker';
 
 import { AuthContext } from '../../contexts/auth';
 import firebase from '../../Services/firebaseConnection';
@@ -12,27 +12,91 @@ export default function Portifolio() {
     const [ modalVisible, setModalVisible ] = useState(false);
     const [ info, setInfo ] = useState([]);
     const [ fotoName, setFotoName ] = useState('');
-    const [ fotoUrl, setFotoUrl ] = useState();
+    const [ fotoUrl, setFotoUrl ] = useState('');
+    const storageRef = firebase.storage();
 
     useEffect(() => {
 
-      async function loadUsers() {
+      async function loadImages() {
         await firebase.database().ref(`album/${user.uid}`).on('value', (snapshoot) => {
           setInfo([]);
 
           snapshoot.forEach((childItem) => {
-            //console.log(childItem.val().urlFoto);
               let data = {
                   key: childItem.key,
-                  url: childItem.val().urlFoto,
-                  name: childItem.val().nomeFoto
+                  url: childItem.val().photoURL,
+                  name: childItem.val().photoFileName
               }
               setInfo(oldArray => [...oldArray, data]);
           })
         })
       }
-      loadUsers();
+      loadImages();
   }, [])
+
+  function sendFoto() {
+    if(info.length < 8){
+    ImagePicker.launchImageLibrary({}, imagePickerCallback);
+    } else {
+      alert('Não é possível adicionar mais de 8 fotos.')
+    }
+  }
+
+  function imagePickerCallback(data){
+    
+    if (data.didcancel) {
+      return;
+    }
+    if (data.error) {
+      alert("Ocorreu um erro estranho, tente novamente outro momento.");
+    }
+    if (!data.uri) {
+      return;
+    }
+
+    uploadImageAlbum(data);
+  }
+
+  async function uploadImageAlbum(data) {
+
+      const blob = await new Promise((resolve) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = () => {
+          resolve(xhr.response);
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', data.uri, true);
+      xhr.send(null);
+  });
+
+    const reference = storageRef.ref(`images/album/${user.uid}/${data.fileName}`);
+    await reference.put(blob);
+    const url = await reference.getDownloadURL();
+
+    let qualquer = await firebase.database().ref('album/' + user.uid);
+    let chave = qualquer.push().key;
+
+    qualquer.child(chave).update({
+      photoURL: url,
+      photoFileName: data.fileName
+  })
+      
+  }
+
+  async function deleteImageAlbum() {
+
+    await firebase.database().ref('album/' + user.uid).child(fotoName.key).remove();
+
+    const deleteImage = storageRef.ref(`images/album/${user.uid}/${fotoName.name}`);
+    deleteImage.delete().then(function() {
+      console.log('Excluiu com sucesso.');
+    }).catch(function(error) {
+      console.log(error);
+    })
+    setModalVisible(!modalVisible);
+  }
+
+
 
  return (
     <View>
@@ -43,16 +107,25 @@ export default function Portifolio() {
     onRequestClose = { () => { } }
     >
       <View style = {styles.modal}>
-      <View style = {{ marginLeft: 350 }}>
+      <View style = {{ marginLeft: 380 }}>
       <TouchableOpacity
+      style = {styles.x}
       onPress={ () => {
         setModalVisible(!modalVisible);
       }}
       >
-        <Text style = {{color: '#FFF', fontSize: 20}}> X </Text>
+        <Text style = {{fontSize: 20}}> X </Text>
       </TouchableOpacity>
       </View>  
         <View style = {styles.modalImage}>
+
+        <TouchableOpacity 
+        style = {styles.btnDeleteImageAlbum}
+        onPress = {() => deleteImageAlbum()}
+        >
+        <Text style = {{ color: '#000' }}> Excluir esta imagem </Text>
+      </TouchableOpacity>
+
         <Image
         source={{uri: fotoUrl}}
         style = {{
@@ -62,6 +135,7 @@ export default function Portifolio() {
         }}
         resizeMode = 'contain'
         />
+
         </View>
       </View>
       </Modal>
@@ -70,7 +144,8 @@ export default function Portifolio() {
     <Text style = {{ color: '#FFF', fontSize: 20, width: 100 }}>   Portifólio </Text>
     <FlatList
     style = {styles.containerFlatList}
-    horizontal = { true }
+    //horizontal = { true }
+    numColumns = { 4 }
     data = { info }
     keyExtractor = { item => item.key}
     renderItem = { ({ item }) => {
@@ -79,6 +154,8 @@ export default function Portifolio() {
    <TouchableWithoutFeedback
     onPress = { () => { 
       setModalVisible(true)
+      setFotoUrl(item.url)
+      setFotoName(item);
     }}
     >
     <Image
@@ -86,7 +163,6 @@ export default function Portifolio() {
     source = {{uri: item.url}}
     />
     </TouchableWithoutFeedback>
-    {/*console.log(item.url)*/}
     </SafeAreaView>
     )
    } }
@@ -97,7 +173,7 @@ export default function Portifolio() {
         <Text style = {{ color: '#FFF', fontSize: 20, marginTop: 11 }}>   Contato </Text>
         <TouchableOpacity
         style = {styles.btnUpload}
-        onPress = {() => { console.log(info.url); }}
+        onPress = {() => sendFoto()}
         >
           <Text style = {{color: '#FFF'}}> Upload </Text>
         </TouchableOpacity>
@@ -111,7 +187,7 @@ const styles = StyleSheet.create({
       width: 400,
       height: 400,
       margin: 3,
-      paddingTop: 23,
+      paddingTop: 5,
       backgroundColor: 'rgba(52, 52, 52, 0.6)',
       borderRadius: 20,
       alignItems: "center",
@@ -152,83 +228,17 @@ const styles = StyleSheet.create({
       marginTop: 40,
       marginHorizontal: 10
     },
-    containerFlatList: {
-      //backgroundColor: 'red'
+    btnDeleteImageAlbum: {
+      backgroundColor: '#FFF',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 140,
+      height: 25,
+      marginBottom: 10,
+      borderRadius: 10
+    },
+    x: {
+      backgroundColor: '#FFF',
+      borderRadius: 10
     }
 });
-
-/*<View style = {{flexDirection: 'row'}}> 
-    <TouchableWithoutFeedback
-    onPress = { () => { setModalVisible(true);}}>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://miro.medium.com/max/1000/1*ciLg4-fezXdbaunhk1E6gQ.jpeg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://s2.glbimg.com/M0ZCm0-RBx9vjM3cken3tcX-VFU=/0x0:2048x1362/695x462/s.glbimg.com/po/tt2/f/original/2016/08/19/12069008_891873374222369_6175874374082915467_o.jpg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://miro.medium.com/max/1000/1*ciLg4-fezXdbaunhk1E6gQ.jpeg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://s2.glbimg.com/M0ZCm0-RBx9vjM3cken3tcX-VFU=/0x0:2048x1362/695x462/s.glbimg.com/po/tt2/f/original/2016/08/19/12069008_891873374222369_6175874374082915467_o.jpg'}}
-    />
-    </TouchableWithoutFeedback>
-    </View>
-    <View style = {{flexDirection: 'row'}}>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://miro.medium.com/max/1000/1*ciLg4-fezXdbaunhk1E6gQ.jpeg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://s2.glbimg.com/M0ZCm0-RBx9vjM3cken3tcX-VFU=/0x0:2048x1362/695x462/s.glbimg.com/po/tt2/f/original/2016/08/19/12069008_891873374222369_6175874374082915467_o.jpg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://miro.medium.com/max/1000/1*ciLg4-fezXdbaunhk1E6gQ.jpeg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://s2.glbimg.com/M0ZCm0-RBx9vjM3cken3tcX-VFU=/0x0:2048x1362/695x462/s.glbimg.com/po/tt2/f/original/2016/08/19/12069008_891873374222369_6175874374082915467_o.jpg'}}
-    />
-    </TouchableWithoutFeedback>
-    </View>*/
-
-    /* await firebase.database().ref(`users/${user.uid}/album/albumPhotoURL`).on('value', (snapshoot) => {
-              setUrl(snapshoot.val());
-          })
-          await firebase.database().ref(`users/${user.uid}/album/albumPhotoName`).on('value', (snapshoot) => {
-            setFotoName(snapshoot.val());
-        }) */
-
-      /*<FlatList
-        data = { info }
-        renderItem = { ({ item }) => (
-        <View style = {{flexDirection: 'row'}}> 
-        <TouchableWithoutFeedback
-        onPress = { () => { setModalVisible(true);}}>
-        <Image
-        style = {styles.estiloPortifolio}
-        source = {{uri: item.url}}
-        />
-        </TouchableWithoutFeedback>
-        </View>
-        )}
-        />*/

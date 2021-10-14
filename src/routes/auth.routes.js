@@ -6,7 +6,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-
+console.disableYellowBox = true;
 
 // Telas Tab Navigator
 import Home from '../pages/Home';
@@ -32,6 +32,8 @@ import CriarConta4 from '../pages/CriarConta4';
 import CriarConta5 from '../pages/CriarConta5';
 import CriarConta6 from '../pages/CriarConta6';
 import Perfil2 from '../pages/Perfil2';
+import Ajuda from '../pages/Ajuda';
+import Sobre from '../pages/Sobre';
 
 
 
@@ -271,6 +273,34 @@ export default function AuthRoutes(){
           }
         }}
         />
+        <Stack.Screen
+        name="Sobre"
+        component={Sobre}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />
+         <Stack.Screen
+        name="Ajuda"
+        component={Ajuda}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />
       </Stack.Navigator>
     </NavigationContainer>
   );}

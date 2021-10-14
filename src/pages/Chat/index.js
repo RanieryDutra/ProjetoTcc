@@ -7,37 +7,47 @@ import { database } from 'firebase';
 
 import Messages from './Messages';
 
-export default function Chat() {
+export default function Chat({ route }) {
 
   const { user } = useContext(AuthContext);
   const navigation = useNavigation();
   const [enviar, setEnviar] = useState('');
   const [messages, setMessages] = useState([]);
-  const [uid, setUid] = useState('');
-
+  const [ user2uid, setUser2Uid ] = useState('');
+  const chaveChat = route.params?.chaveDoChat;
+  const info = route.params?.infos;
+  
+//console.log(user.uid);
 
   useEffect( () => {
 
-    getUserUid();
+    async function getHabilidades() {
+      await database().ref('users').child(info.com).once('value', (snap) => {
+        setUser2Uid(snap.val().Habilidades);
+      })
+    }
+    getHabilidades();
+
+    getUserUid(info.key);
 
   }, [])
 
   // Conectar o usuário ao uid
 
-  async function getUserUid() {
-    getMessages(user.uid)
-    setUid(user.uid);
+  async function getUserUid(item) {
+    getMessages(item)
   }
 
-  async function sendMessage() {
+  async function sendMessage(item) {
 
-    const masterRef = database().ref(`master/chat/${uid}`);
+    const masterRef = database().ref(`master/chat/${item}`).push();
     const dateNow = new Date();
     if(enviar) {
       
-      masterRef.push({
+      masterRef.update({
+        messages: {
         message: enviar,
-        who: true,
+        who: user.uid,
         date: {
           day: dateNow.getDate(),
           month: dateNow.getMonth() + 1,
@@ -45,87 +55,68 @@ export default function Chat() {
           hour: dateNow.getHours(),
           minutes: dateNow.getMinutes()
         }
+      }
       })
-
       setEnviar('');
-
     }
   }
 
   // Obter menssagens da lista
 
-  async function getMessages(uid) {
-    const messagesRef = database().ref(`master/chat/${uid}/`);
+  async function getMessages(chave) {
+    const messagesRef = database().ref(`master/chat/${chave}/`);
 
     messagesRef.on('value', (data) => {
-
+      //console.log(user.uid)
       // Obter menssagens
       var list = [];
 
-      if(data.val()) {
-
+      if (data.val()) {
+        
         data.forEach(element => {
-          if(element.val().who) {
-            list.push({
-              text: element.val().message,
-              me: true,
-              date: element.val().date,
-              key: element.key
-            })
-          } else {
-            list.push({
-              text: element.val().message,
-              me: false,
-              date: element.val().date,
-              key: element.key
-            })
-
-          }
-
+          element.forEach((item) => {
+          //console.log(item.val())
+        if (item.val().who == user.uid) {
+          list.push({
+            text: item.val().message,
+            me: item.val().who,
+            date: item.val().date,
+            key: element.key
+          });
+        } if (item.val().who == info.com) {
+          list.push({
+            text: item.val().message,
+            me: item.val().who,
+            date: item.val().date,
+            key: element.key
+          });
+        }
         })
-
+      })
       } else {
         list = [];
         setMessages([]);
       }
-
       setMessages(list);
+      //console.log(list)
 
     })
   }
-
+  //console.log(messages);
   return (
     <View style = {styles.Principal}>
-       <View style = {styles.estiloReader}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                    <Image
-                    source={require('../Home/menu-b.png')}
-                    style={{
-                        height: 23,
-                        width: 23
-                    }}
-                    />
-                </TouchableOpacity>
-
-                <Image
-                    source={require('../Home/LogoBranca.png')}
-                    style={{
-                        width: 65,
-                        height: 23
-                    }}
-                    />
-        </View>
         <View style = {styles.costasImagePerfil}>
                 <Image 
                     style={styles.imagemPerfil}
-                    source={require('../../assets/perfil1.jpg')}
-                    resizeMode = 'contain'
+                    source={{ uri: info.avatar }}
                 />
                 <View style = {styles.estiloPerfil}> 
-                <Text style = {{ color: '#FFF', fontSize: 20}}>Nome </Text>
-                <Text style = {{ color: '#FFF', fontSize: 15, marginLeft: 5}}>Habilidades </Text>
+                <Text style = {{ color: '#FFF', fontSize: 20}}>{info.nome} </Text>
+                <View style = {{ maxHeight: 22 }}>
+                <Text numberOfLines = {3} style = {{ color: '#FFF', fontSize: 15, marginLeft: 5}}>{user2uid} </Text>
+                </View>
                 <View style = {{ alignItems: 'flex-start', marginTop: 50}}>
-                <Text style = {{ color: '#505050', fontSize: 12}}>Cidade - Estado </Text>
+                <Text style = {{ color: '#505050', fontSize: 12}}>{info.cidade} - {info.estado} </Text>
                 </View>
                 </View>
                 </View>
@@ -153,7 +144,7 @@ export default function Chat() {
           />
           <TouchableOpacity 
           style = {styles.botaoEnviar}
-          onPress = {() => sendMessage()}
+          onPress = {() => sendMessage(info.key)}
           >
           <Icon name="paper-plane" color={'#FFFF'} size={30} style = {{ marginRight: 5 }}/>
           </TouchableOpacity>
@@ -189,7 +180,7 @@ const styles = StyleSheet.create({
   },
   imagemPerfil: {
     width: 120,
-    height: 110,
+    height: 120,
     borderRadius: 80,
     marginLeft: 10
   },

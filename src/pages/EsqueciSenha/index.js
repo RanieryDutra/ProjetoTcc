@@ -1,7 +1,25 @@
-import  React from 'react';
+import  React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default function EsqueciSenha ({ navigation }) {
+import firebase from '../../Services/firebaseConnection';
+import { useNavigation } from '@react-navigation/native';
+
+export default function EsqueciSenha () {
+
+    const navigation = useNavigation();
+    const auth = firebase.auth();
+    const [email, setEmail] = useState('');
+
+
+    async function enviarEmail() {
+        auth.sendPasswordResetEmail(email).then(function() {
+            console.log('Email enviado');
+          }).catch(function(error) {
+            console.log(error);
+          });
+          navigation.navigate('EsqueciSenha3');
+    }
+
     return (
         <View style = {styles.containerPrincipal}>
             <View style = {styles.containerAzul}>
@@ -14,12 +32,13 @@ export default function EsqueciSenha ({ navigation }) {
                     placeholder = "Digite seu e-mail aqui"
                     placeholderTextColor = '#FFF'
                     autoCorrect = { false }
-                    onChangeText = {() => {}}
+                    value = { email }
+                    onChangeText = { (text) => setEmail(text) }
                 />
                 </View>
                 <View style = {styles.containerBotao}>
                 <TouchableOpacity 
-                onPress = { () => navigation.navigate('EsqueciSenha2')}>
+                onPress = { () => enviarEmail()}>
                     <Text style = {styles.containerBotaoTexto}>
                         Enviar
                     </Text>
@@ -56,7 +75,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontSize: 17,
         borderRadius: 7,
-        padding: 10, 
+        padding: 10,
+        color: '#FFF'
       },
       containerEmail: {
         marginTop: 60,

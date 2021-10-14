@@ -1,19 +1,22 @@
-import React, { useState, useContext,useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Keyboard } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
 import { AuthContext } from '../../contexts/auth';
+import { useNavigation } from '@react-navigation/native'
 import firebase from '../../Services/firebaseConnection';
 import { Picker } from '@react-native-community/picker';
 
-export default function CadastrarServico() {
+export default function CadastrarServico({ route }) {
  
     const { user } = useContext(AuthContext);
+    const navigation = useNavigation();
     const [valorPicker, setValorPicker] = useState('');
     const [valorServico, setValorServico] = useState('');
     const [valorDescricao, setValorDescricao] = useState('');
     const [valorCidade, setValorCidade] = useState('');
     const [valorEstado, setValorEstado] = useState('');
     const [valorFoto, setValorFoto] = useState('');
+    const [valorRoute, setValorRoute] = useState(route.params);
  
     useEffect(() => {
         async function loadFoto(){
@@ -33,11 +36,41 @@ export default function CadastrarServico() {
                 setValorEstado(snapshot.val());
             });
         } loadEstado();
+
+        function loadServico(){
+            if (valorRoute) {
+                setValorPicker(valorRoute.categoria);
+                setValorServico(valorRoute.servico);
+                setValorDescricao(valorRoute.descricao);
+            }
+        }
+        loadServico();
     }, [])
 
     
     async function salvarInformacoes() {
-        if(valorPicker !== '' && valorDescricao !== '' && valorServico !== '') {
+        if(valorRoute){
+            
+            let qualquer2 = await firebase.database().ref('servicos/' + user.uid);
+            qualquer2.child(valorRoute.key).update({
+                categorias: valorPicker,
+                descricao: valorDescricao,
+                servico: valorServico,
+                cidade: valorCidade,
+                estado: valorEstado,
+                fotoUrl: valorFoto
+            })
+            setValorPicker('');
+            setValorServico('');
+            setValorDescricao('');
+            setValorFoto('');
+            setValorCidade('');
+            setValorEstado('');
+            setValorRoute('');
+            navigation.goBack();
+            
+        }
+        else if(valorPicker !== '' && valorDescricao !== '' && valorServico !== '') {
 
             let qualquer = await firebase.database().ref('servicos/' + user.uid);
             let chave = qualquer.push().key;
@@ -106,7 +139,7 @@ export default function CadastrarServico() {
            style = {styles.textInput}
            placeholder = 'Descreva o que você faz'
            placeholderTextColor = '#FFF'
-           maxLength = { 80 }
+           maxLength = { 120 }
            numberOfLines = { 4 }
            multiline = { true }
            value = { valorDescricao }

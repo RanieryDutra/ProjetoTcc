@@ -47,7 +47,7 @@ export default function ConteudoDrawerOut(props) {
           </TouchableOpacity>
 
           <TouchableOpacity 
-          onPress = { () => {} }
+           onPress = { () => navigation.navigate('Ajuda') }
           style = {{
             borderBottomWidth: 1,
             borderBottomColor: 'gray',
@@ -65,7 +65,7 @@ export default function ConteudoDrawerOut(props) {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity 
+          {/*<TouchableOpacity 
           onPress = { () => {} }
           style = {{
             borderBottomWidth: 1,
@@ -83,10 +83,10 @@ export default function ConteudoDrawerOut(props) {
             }}>
               Políticas de uso
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
 
           <TouchableOpacity 
-          onPress = { () => {} }
+          onPress = { () => navigation.navigate('Sobre') }
           style = {{
             borderBottomWidth: 1,
             borderBottomColor: 'gray',
@@ -94,7 +94,8 @@ export default function ConteudoDrawerOut(props) {
             width: '97%',
             marginBottom: 10,
             fontSize: 17,
-            padding: 10
+            padding: 10,
+            marginTop: 580,
           }}>
             <Text style = {{
               fontSize: 23,

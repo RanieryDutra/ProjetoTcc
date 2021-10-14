@@ -8,6 +8,10 @@ export default function Contato2() {
 
     const navigation = useNavigation();
 
+    async function handleChat() {
+      
+    }
+
  return (
    <View>
        <View style = {{flexDirection: 'row'}}>

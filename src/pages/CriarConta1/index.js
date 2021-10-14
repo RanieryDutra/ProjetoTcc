@@ -15,7 +15,7 @@ export default function CriarConta1() {
     const { EmailSenha } = useContext(AuthContext);
 
     function handleEmailSenha(){
-      EmailSenha(email, senha)
+      EmailSenha(email, senha);
       navigation.navigate('CriarConta2');
       setEmail('');
       setSenha('');

@@ -11,7 +11,6 @@ export default function Home() {
     const { user } = useContext(AuthContext);
     const navigation = useNavigation();
     const [dataa, setData] = useState([]);
-    //const [ key, setKey ] = useState([]);
 
     useEffect(() => {
 
@@ -133,53 +132,3 @@ const styles = StyleSheet.create({
               padding: 10
       }
 });
-
-        /*{id: <Text style = {styles.estiloTexto}>{user && user.uid} </Text>, 
-        nome: <Text style = {styles.estiloTexto}> {user && user.nome} </Text>, 
-        idade: 50, 
-        email: <Text style = {styles.estiloTexto}> {user && user.email} </Text>},
-        {id: '2', nome: 'Thiagão', idade: 55, email: 'thiagao.gustavo@aedb.br'},
-        {id: '3', nome: 'Carlos', idade: 60, email: 'luizinho.carrrlos@aedb.br'},
-        {id: '4', nome: 'Koval', idade: 70, email: 'koval.123@aedb.br'},
-        {id: '5', nome: 'Leo', idade: 80, email: 'leo.369@aedb.br'}*/
-
-
-        /*{key: '1',foto: 'Foto',profissao: 'Digital Influencer', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},
-        {key: '2',foto: 'Foto',profissao: 'Programador Java', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},
-        {key: '3',foto: 'Foto',profissao: 'Design de interiores', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},
-        {key: '4',foto: 'Foto',profissao: 'Editor de Video', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},
-        {key: '5',foto: 'Foto',profissao: 'Modelo', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},
-        {key: '6',foto: 'Foto',profissao: 'Digital Influencer', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},
-        {key: '7',foto: 'Foto',profissao: 'Programador Java', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},
-        {key: '8',foto: 'Foto',profissao: 'Design de interiores', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},
-        {key: '9',foto: 'Foto',profissao: 'Editor de Video', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},
-        {key: '10',foto: 'Foto',profissao: 'Modelo', servicos: 'Uma breve descrição dos serviços prestados', cidade: 'Resende-RJ'},*/
-
-        /*async function loadPhotoProfile() {
-            await firebase.database().ref('users/' + dataa.key + '/photoURL').on('value', (snapshot) => {
-              if(!snapshot.val()) {
-                setData({
-                    photoUrl:'https://png.pngtree.com/png-vector/20190307/ourmid/pngtree-vector-edit-profile-icon-png-image_762931.jpg'
-                });
-              } else {
-                setData({ photoUrl: snapshot.val()});
-              }
-            })
-          }
-        loadPhotoProfile();*/
-
-        /* let data = {
-                        key: childItem.key,
-                        nome: childItem.val().nome,
-                        habilidades: childItem.val().Habilidades,
-                        cidade: childItem.val().cidade,
-                        estado: childItem.val().estado,
-                        photoUrl: childItem.val().photoURL
-                    }*/
-
-                    {/*let data = {
-                        key: childItem.key,
-                        nome: childItem.val().servico,
-                        cidade: childItem.val().cidade,
-                        estado: childItem.val().estado,
-                    photoUrl: childItem.val().photoURL*/}

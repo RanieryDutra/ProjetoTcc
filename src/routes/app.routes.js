@@ -6,12 +6,12 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-
+console.disableYellowBox = true;
 
 
 // Telas Tab Navigator
 import Home from '../pages/Home';
-import Chat from '../pages/Chat';
+import ConversasChat from '../pages/Chat/ConversasChat';
 import Pesquisa from '../pages/Pesquisa';
 import Perfil from '../pages/Perfil';
 
@@ -20,10 +20,16 @@ import Login from '../pages/Login';
 import ConteudoDrawerOut from '../pages/ConteudoDrawer/ConteudoDrawerOut';
 import ConteudoDrawerIn from '../pages/ConteudoDrawer/ConteudoDrawerIn';
 import CadastrarServico from '../pages/CadastrarServico';
+import ServicosCadastrados from '../pages/ServicosCadastrados';
+import Planos from '../pages/Planos';
+import Ajuda from '../pages/Ajuda';
+//import PoliticasDeUso from '../pages/PoliticasDeUso';
+import Sobre from '../pages/Sobre';
 
 //Telas Stack Navigator
 
 import Perfil2 from '../pages/Perfil2';
+import Chat from '../pages/Chat';
 
 
 
@@ -62,8 +68,8 @@ function Tabs() {
      }}
      />
     <Tab.Screen
-    name='Chat'
-    component={Chat}
+    name='ConversasChat'
+    component={ConversasChat}
     options= {{
       tabBarLabel: 'Chat',
       tabBarColor: '#000000',
@@ -146,6 +152,90 @@ export default function AppRoutes(){
          <Stack.Screen
         name="CadastrarServico"
         component={CadastrarServico}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />
+         <Stack.Screen
+        name="ServicosCadastrados"
+        component={ServicosCadastrados}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />
+         <Stack.Screen
+        name="Planos"
+        component={Planos}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />
+         <Stack.Screen
+        name="Ajuda"
+        component={Ajuda}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />
+         {/*<Stack.Screen
+        name="PoliticasDeUso"
+        component={PoliticasDeUso}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />*/}
+         <Stack.Screen
+        name="Sobre"
+        component={Sobre}
+        options={{
+          //headerShown: false,
+          headerStyle: {
+            backgroundColor: '#151515',
+            height: 50,
+            
+          },
+          headerTintColor: '#FFFF',
+          headerTitle: 'Voltar'
+        }} 
+         />
+         <Stack.Screen
+        name="Chat"
+        component={Chat}
         options={{
           //headerShown: false,
           headerStyle: {

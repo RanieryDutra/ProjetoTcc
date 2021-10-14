@@ -19,24 +19,7 @@ export default function Pesquisa() {
     const [valorPicker, setValorPicker] = useState('');
     const modalizeRef = useRef(null);
     const [categoria, setCategoria] = useState('');
-    {/*const info = [
-        {key: '1',nome: 'Adminstrativo / Secretariado / Finanças', valor: '' , setValor: ''},
-        {key: '2',nome: 'Comercial / Vendas'},
-        {key: '3',nome: 'Telecomunicações / Informática / Multimídia'},
-        {key: '4',nome: 'Atendimento ao cliente / Call Center'},
-        {key: '5',nome: 'Banco / Seguros / Consultoria Jurídica'},
-        {key: '6',nome: 'Logística / Distribuição'},
-        {key: '7',nome: 'Turismo / Hotelaria / Restaurante'},
-        {key: '8',nome: 'Educação / Formação'},
-        {key: '9',nome: 'Marketing / Comunicação'},
-        {key: '10',nome: 'Serviços Domésticos / Limpezas'},
-        {key: '11',nome: 'Constrição / Industrial'},
-        {key: '12',nome: 'Saúde / Medicina / Enfermagem'},
-        {key: '13',nome: 'Agricultura / Pecuária / Veterinária'},
-        {key: '14',nome: 'Engenharia / Arquitetura / Design'}
-    ];*/}
-    
-
+    const [text, onChangeText] = useState('');
 
     useEffect(() => {
 
@@ -45,7 +28,7 @@ export default function Pesquisa() {
             if(valorPicker == '') {
             await firebase.database().ref('servicos').on('value', function(snapshoot) {
                 setData([]);
-                console.log(snapshoot.val());
+                //console.log(snapshoot.val());
                 snapshoot.forEach((childItem) => {
                     childItem.forEach((filhoItem) => {
                     let date = {
@@ -65,9 +48,10 @@ export default function Pesquisa() {
           } else {
             await firebase.database().ref('servicos').on('value', function(snapshoot) {
                 setData([]);
-                console.log(snapshoot.val());
+                //console.log(snapshoot.val());
                 snapshoot.forEach((childItem) => {
                     childItem.forEach((filhoItem) => {
+                    if (valorPicker === filhoItem.val().categorias) {
                     let date = {
                             chave: childItem.key,
                             key: filhoItem.key,
@@ -79,6 +63,7 @@ export default function Pesquisa() {
                     }
                     setData(oldArray => [...oldArray, date]);
                     
+                        }
                     })
                 })
             })
@@ -86,7 +71,7 @@ export default function Pesquisa() {
         }
         loadUsers();
     }, [valorPicker])
-    //console.log(dataa);
+
     function handleSeila(item) {
         navigation.navigate('Perfil2', { uid: item.chave });
     }
@@ -95,9 +80,66 @@ export default function Pesquisa() {
         modalizeRef.current?.open();
     }
 
-    async function loadUsuarios() {
-        console.log(valorPicker);
+    function removeAcento(text) {
+        text = text.toLowerCase();
+        text = text.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a');
+        text = text.replace(new RegExp('[ÉÈÊ]', 'gi'), 'e');
+        text = text.replace(new RegExp('[ÍÌÎ]', 'gi'), 'i');
+        text = text.replace(new RegExp('[ÓÒÔÕ]', 'gi'), 'o');
+        text = text.replace(new RegExp('[ÚÙÛ]', 'gi'), 'u');
+        text = text.replace(new RegExp('[Ç]', 'gi'), 'c');
+        return text;
     }
+
+    async function loadUsuarios(dataInputText) {
+            if (dataInputText.trim().length > 2) {
+                await firebase
+                    .database()
+                    .ref('servicos')
+                    .on('value', function (snapshoot) {
+                        setData([]);
+                        snapshoot.forEach((childItem) => {
+                            childItem.forEach((filhoItem) => {
+                                if (removeAcento(filhoItem.val().servico.toLowerCase()).toLowerCase().includes(dataInputText)) {
+                                    let date = {
+                                        chave: childItem.key,
+                                        key: filhoItem.key,
+                                        nome: filhoItem.val().servico,
+                                        cidade: filhoItem.val().cidade,
+                                        estado: filhoItem.val().estado,
+                                        photoUrl: filhoItem.val().fotoUrl,
+                                        descricao: filhoItem.val().descricao,
+                                    };
+                                    setData((oldArray) => [...oldArray, date]);
+                                }
+                            });
+                        });
+                    });
+            } else {
+                setValorPicker('')
+                await firebase
+                    .database()
+                    .ref('servicos')
+                    .on('value', function (snapshoot) {
+                        setData([]);
+                        snapshoot.forEach((childItem) => {
+                            childItem.forEach((filhoItem) => {
+                                let date = {
+                                    chave: childItem.key,
+                                    key: filhoItem.key,
+                                    nome: filhoItem.val().servico,
+                                    cidade: filhoItem.val().cidade,
+                                    estado: filhoItem.val().estado,
+                                    photoUrl: filhoItem.val().fotoUrl,
+                                    descricao: filhoItem.val().descricao,
+                                };
+                                setData((oldArray) => [...oldArray, date]);
+                            });
+                        });
+                    });
+                }
+            }
+
        return (
         <View style = {styles.containerPrincipal}>
 
@@ -159,10 +201,12 @@ export default function Pesquisa() {
             
             <TextInput
             style = {styles.inputPesquisa}
+            onChangeText={(text) => onChangeText(text)}
+            value={text}
             />
             
             <TouchableOpacity
-            onPress = { () => loadUsuarios()}
+            onPress = { () => loadUsuarios(text)}
             >
             <View style = {styles.iconeInput}>
             <Icon name="search" color={'#FFFF'} size={40} style = {{ height: 50, marginTop: 2 }}/>

@@ -83,6 +83,8 @@ target 'jobs' do
   pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
 
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   target 'jobsTests' do
     inherit! :complete
     # Pods for testing

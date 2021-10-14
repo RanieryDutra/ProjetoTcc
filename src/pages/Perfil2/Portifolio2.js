@@ -1,9 +1,34 @@
-import React, { useState } from 'react';
-import { View, Text, Modal, TouchableWithoutFeedback, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Modal, TouchableWithoutFeedback, TouchableOpacity, Image, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 
-export default function Portifolio2() {
+import firebase from '../../Services/firebaseConnection';
+
+export default function Portifolio2(props) {
 
     const [ modalVisible, setModalVisible ] = useState(false);
+    const [ info, setInfo ] = useState([]);
+    const [ fotoUrl, setFotoUrl ] = useState();
+    const sobreUser = props;
+    
+
+    useEffect(() => {
+
+      async function loadImages() {
+        await firebase.database().ref('album/' + sobreUser.data).on('value', (snapshoot) => {
+          setInfo([]);
+
+          snapshoot.forEach((childItem) => {
+              let data = {
+                  key: childItem.key,
+                  url: childItem.val().photoURL,
+                  name: childItem.val().photoFileName
+              }
+              setInfo(oldArray => [...oldArray, data]);
+          })
+        })
+      }
+      loadImages();
+  }, [])
 
  return (
     <View>
@@ -11,89 +36,64 @@ export default function Portifolio2() {
     animationType = "slide"
     transparent = { true }
     visible = { modalVisible }
-    onRequestClose = { () => {} }
+    onRequestClose = { () => { } }
     >
       <View style = {styles.modal}>
-      <View style = {{ marginLeft: 350 }}>
+      <View style = {{ marginLeft: 380 }}>
       <TouchableOpacity
+      style = {styles.x}
       onPress={ () => {
         setModalVisible(!modalVisible);
       }}
       >
-        <Text style = {{color: '#FFF', fontSize: 20}}> X </Text>
+        <Text style = {{fontSize: 20}}> X </Text>
       </TouchableOpacity>
       </View>  
         <View style = {styles.modalImage}>
+
         <Image
-        source={{uri: 'https://miro.medium.com/max/1000/1*ciLg4-fezXdbaunhk1E6gQ.jpeg'}}
+        source={{uri: fotoUrl}}
         style = {{
           width: 350,
           height: 350
+          
         }}
+        resizeMode = 'contain'
         />
+
         </View>
       </View>
-    </Modal>
+      </Modal>
 
     <View style = {styles.boxPortifolio}>
     <Text style = {{ color: '#FFF', fontSize: 20, width: 100 }}>   Portifólio </Text>
     <View style = {{flexDirection: 'row'}}> 
-    <TouchableWithoutFeedback
-    onPress = { () => {
-    setModalVisible(true);
+    <FlatList
+    style = {styles.containerFlatList}
+    numColumns = { 4 }
+    data = { info }
+    keyExtractor = { item => item.key}
+    renderItem = { ({ item }) => {
+      return(
+    <SafeAreaView style = {styles.containerFlatList}> 
+   <TouchableWithoutFeedback
+    onPress = { () => { 
+      setModalVisible(true)
+      setFotoUrl(item.url)
     }}
     >
     <Image
     style = {styles.estiloPortifolio}
-    source = {{uri: 'https://miro.medium.com/max/1000/1*ciLg4-fezXdbaunhk1E6gQ.jpeg'}}
+    source = {{uri: item.url}}
     />
     </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://s2.glbimg.com/M0ZCm0-RBx9vjM3cken3tcX-VFU=/0x0:2048x1362/695x462/s.glbimg.com/po/tt2/f/original/2016/08/19/12069008_891873374222369_6175874374082915467_o.jpg'}}
+    </SafeAreaView>
+    )
+   } }
     />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://miro.medium.com/max/1000/1*ciLg4-fezXdbaunhk1E6gQ.jpeg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://s2.glbimg.com/M0ZCm0-RBx9vjM3cken3tcX-VFU=/0x0:2048x1362/695x462/s.glbimg.com/po/tt2/f/original/2016/08/19/12069008_891873374222369_6175874374082915467_o.jpg'}}
-    />
-    </TouchableWithoutFeedback>
-    </View>
-    <View style = {{flexDirection: 'row'}}>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://miro.medium.com/max/1000/1*ciLg4-fezXdbaunhk1E6gQ.jpeg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://s2.glbimg.com/M0ZCm0-RBx9vjM3cken3tcX-VFU=/0x0:2048x1362/695x462/s.glbimg.com/po/tt2/f/original/2016/08/19/12069008_891873374222369_6175874374082915467_o.jpg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://miro.medium.com/max/1000/1*ciLg4-fezXdbaunhk1E6gQ.jpeg'}}
-    />
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback>
-    <Image
-    style = {styles.estiloPortifolio}
-    source = {{uri: 'https://s2.glbimg.com/M0ZCm0-RBx9vjM3cken3tcX-VFU=/0x0:2048x1362/695x462/s.glbimg.com/po/tt2/f/original/2016/08/19/12069008_891873374222369_6175874374082915467_o.jpg'}}
-    />
-    </TouchableWithoutFeedback>
     </View>
     </View>
+    <Text style = {{ color: '#FFF', fontSize: 20, marginTop: 11, marginBottom: 5 }}>   Contato </Text>
     </View>
   );
 }
@@ -143,6 +143,10 @@ const styles = StyleSheet.create({
       height: 217,
       marginTop: 55,
       marginHorizontal: 10
+    },
+    x: {
+      backgroundColor: '#FFF',
+      borderRadius: 10
     }
 });
 

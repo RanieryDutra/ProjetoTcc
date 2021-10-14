@@ -1,23 +1,49 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import { AuthContext } from '../../contexts/auth';
+
 function Messages({ item }) {
-  if(item.me) {
+
+  const { user } = useContext(AuthContext);
+  const [ hora, setHora ] = useState('');
+  const [ minutos, setMinutos ] = useState('');
+
+  useEffect( () => {
+    function horaEminutos() {
+      if(item.date.hour < 10) {
+        setHora('0' + item.date.hour);
+      }
+      if(item.date.minutes < 10) {
+        setMinutos('0' + item.date.minutes);
+      }
+      if(item.date.hour >= 10) {
+        setHora(item.date.hour);
+      }
+      if(item.date.minutes >= 10) {
+        setMinutos(item.date.minutes);
+      }
+    }
+    horaEminutos()
+  },[])
+  
+  //console.log(item)
+  if(item.me == user.uid) {
  return (
    <View style = {styles.messageMe}>
      <View style = {styles.bkMessageMe}>
        <Text style = {styles.messageMeText}>{item.text}</Text>
       </View>
-      <Text style = {styles.horaMinutos}>{item.date.hour}:{item.date.minutes}</Text>
+      {<Text style = {styles.horaMinutos}>{hora}:{minutos}</Text>}
    </View>
   );
-  } else {
+  } if(item.me != user.uid) {
     return(
     <View style = {styles.messageOther}>
       <View style = {styles.bkMessageOther}>
         <Text style = {styles.messageOtherText}>{item.text}</Text>
       </View>
-        <Text style = {styles.horaMinutosOhter}>{item.date.hour}:{item.date.minutes.toFixed(2)}</Text>
+        {<Text style = {styles.horaMinutosOhter}>{hora}:{minutos}</Text>}
     </View>
     )  
   }
@@ -40,7 +66,7 @@ const styles = StyleSheet.create({
     color: '#bbbb',
     alignSelf: 'flex-start',
     marginTop: 5,
-    marginLeft: 85
+    marginLeft: 5
   },
   bkMessageMe: {
     backgroundColor: '#2B4051',

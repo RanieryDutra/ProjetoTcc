@@ -5,7 +5,7 @@ import { AuthContext } from '../../contexts/auth';
 
 export default function ConteudoDrawerIn(props) {
 
-  const { user, Deslogando } = useContext(AuthContext);
+  const { Deslogando } = useContext(AuthContext);
   const navigation = useNavigation();
 
  return (
@@ -49,7 +49,7 @@ export default function ConteudoDrawerIn(props) {
           </TouchableOpacity>
 
           <TouchableOpacity 
-          onPress = { () => {} }
+          onPress = { () => navigation.navigate('ServicosCadastrados') }
           style = {{
             borderBottomWidth: 1,
             borderBottomColor: 'gray',
@@ -68,7 +68,7 @@ export default function ConteudoDrawerIn(props) {
           </TouchableOpacity>
 
           <TouchableOpacity 
-          onPress = { () => {} }
+          onPress = { () => navigation.navigate('Planos') }
           style = {{
             borderBottomWidth: 1,
             borderBottomColor: 'gray',
@@ -82,12 +82,12 @@ export default function ConteudoDrawerIn(props) {
               fontSize: 22,
               color: '#FFF'
             }}>
-            Meu plano
+            Seja um usuário PRO
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity 
-          onPress = { () => {} }
+          onPress = { () => navigation.navigate('Ajuda') }
           style = {{
             borderBottomWidth: 1,
             borderBottomColor: 'gray',
@@ -113,7 +113,7 @@ export default function ConteudoDrawerIn(props) {
             backgroundColor: 'transparent',    
             width: '97%',
             marginBottom: 10,
-            marginTop: 340,
+            marginTop: 400,
             fontSize: 17,
             padding: 10
           }}>
@@ -125,8 +125,8 @@ export default function ConteudoDrawerIn(props) {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-          onPress = { () => {} }
+          {/*<TouchableOpacity 
+          onPress = { () => navigation.navigate('PoliticasDeUso') }
           style = {{
             borderBottomWidth: 1,
             borderBottomColor: 'gray',
@@ -142,10 +142,10 @@ export default function ConteudoDrawerIn(props) {
             }}>
               Políticas de uso
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
 
           <TouchableOpacity 
-          onPress = { () => {} }
+          onPress = { () => navigation.navigate('Sobre') }
           style = {{
             borderBottomWidth: 1,
             borderBottomColor: 'gray',

@@ -16,9 +16,9 @@ export default function CriarConta6 () {
                 <Text style = {styles.estiloFrase}>
                     Pronto!
                 </Text>
-                <Text style = {styles.estiloTexto}>
+                {/*<Text style = {styles.estiloTexto}>
                 Em breve receberá um e-mail com a confirmação do cadastro.
-                </Text>
+                </Text>*/}
                 <Text style = {styles.estiloTexto2}>
                 Agora poderá utilizar todas as funções do nosso app.
                 </Text>

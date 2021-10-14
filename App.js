@@ -7,7 +7,7 @@ import AuthProvider from './src/contexts/auth';
 import Routes from './src/routes/index';
 
 export default function App() {
- return (
+  return (
    <NavigationContainer independent={true}>
      <AuthProvider>
      <StatusBar backgroundColor="#151515" barStyle="light-content"/>
